@@ -43,6 +43,7 @@ class MyIntegration:
         headers = {
             'Authorization':
                 'Bearer ' + self.my_variables_map["MY_NOTION_SECRET_TOKEN"],
+            'Notion-Version': '2021-05-13',
             'Content-Type': 'application/json'
         }
         payload = json.dumps({
