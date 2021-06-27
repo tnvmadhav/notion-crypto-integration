@@ -24,7 +24,7 @@ class MyIntegration:
         url = "https://api.notion.com/v1/databases/"
         headers = {
             'Authorization':
-                'Bearer secret_LsHNgOCnmftveIMHBWAgIUivRnOHdBMxyXu1zGdibJn'
+                'Bearer ' + self.my_variables_map["MY_NOTION_SECRET_TOKEN"]
         }
         response = requests.request("GET", url, headers=headers)
         self.my_variables_map["DATABASE_ID"] = response.json()["results"][0]["id"]
