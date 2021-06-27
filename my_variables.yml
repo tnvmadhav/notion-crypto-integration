@@ -1,11 +1,1 @@
 MY_NOTION_SECRET_TOKEN: <insert-your-notion-integration-secret-token>
-REFERENCE_CURRENCY: USDT
-NOTION_ENTRIES:
-  DOGE:
-    page: <database-entry-page-id>
-    # dafault value
-    price: 0
-  SHIB:
-    page: <database-entry-page-id>
-    # dafault value
-    price: 0
