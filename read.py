@@ -16,6 +16,29 @@ class MyIntegration:
                 self.my_variables_map = yaml.safe_load(stream)
             except yaml.YAMLError as exc:
                 print("[Error]: while reading yml file", exc)
+        self.my_variables_map["NOTION_ENTRIES"] = {}
+        self.getDatabaseId()
+        self.getNotionDatabaseEntities()
+
+    def getDatabaseId(self):
+        url = "https://api.notion.com/v1/databases/"
+        headers = {
+            'Authorization':
+                'Bearer secret_LsHNgOCnmftveIMHBWAgIUivRnOHdBMxyXu1zGdibJn'
+        }
+        response = requests.request("GET", url, headers=headers)
+        self.my_variables_map["DATABASE_ID"] = response.json()["results"][0]["id"]
+
+    def getNotionDatabaseEntities(self):
+        url = f"https://api.notion.com/v1/databases/{self.my_variables_map['DATABASE_ID']}/query"
+        headers = {
+            'Notion-Version': '2021-05-13',
+            'Authorization': 'Bearer ' + self.my_variables_map["MY_NOTION_SECRET_TOKEN"]
+        }
+        response = requests.request("POST", url, headers=headers)
+        resp = response.json()
+        for v in resp["results"]:
+            self.my_variables_map["NOTION_ENTRIES"].update({v["properties"]["Name"]["title"][0]["text"]["content"]: {"page": v["id"], "price": float(v["properties"]["Price/Coin"]["number"])}})
 
     def getCryptoPrices(self):
         """
@@ -24,12 +47,8 @@ class MyIntegration:
         """
         for name, data in self.my_variables_map["NOTION_ENTRIES"].items():
             url = f"https://api.binance.com/api/v3/avgPrice?"\
-                f"symbol={name}{self.my_variables_map['REFERENCE_CURRENCY']}"
-            payload = {}
-            headers = {}
-            response = requests.request(
-                "GET", url, headers=headers, data=payload
-            )
+                f"symbol={name}USDT"
+            response = requests.request("GET", url)
             if response.status_code == 200:
                 content = response.json()
                 data['price'] = content['price']
