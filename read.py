@@ -23,6 +23,7 @@ class MyIntegration:
     def getDatabaseId(self):
         url = "https://api.notion.com/v1/databases/"
         headers = {
+            'Notion-Version': '2021-05-13',
             'Authorization':
                 'Bearer ' + self.my_variables_map["MY_NOTION_SECRET_TOKEN"]
         }
